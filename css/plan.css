@@ -1,0 +1,109 @@
+/* 08 · Plan de révision */
+.entete-plan { margin-bottom: 16px; }
+.chips-examens { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.chip-examen { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 10px; background: var(--piste); font-weight: 700; font-size: 13.5px; }
+.chip-examen svg { width: 16px; height: 16px; }
+.chip-examen.prochain { background: var(--teinte-orange); color: var(--texte-orange); }
+.plan-haut { display: grid; grid-template-columns: minmax(0, 2fr) minmax(220px, 0.9fr) minmax(200px, 0.8fr); gap: 18px; margin-bottom: 18px; }
+.plan-haut .carte { border-radius: 18px; padding: 20px 22px; }
+.conseils-tete { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+.conseils-tete .tete { width: 90px; height: 90px; flex-shrink: 0; }
+.conseils { list-style: none; margin: 0 0 0 106px; padding: 0; }
+.conseils li { display: flex; gap: 12px; margin-bottom: 12px; }
+.conseils p { margin: 0 0 4px; font-size: 15px; line-height: 1.45; }
+.conseils .lien { min-height: 28px; padding: 0; font-size: 14px; }
+.rond-num { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 900; font-size: 13px; display: grid; place-items: center; flex-shrink: 0; margin-top: 1px; }
+.plan-pret { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; }
+.plan-pret .titre-carte { font-size: 18px; }
+.plan-serie .serie-ligne { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.plan-serie .flamme { width: 34px; height: 42px; opacity: .45; filter: grayscale(.5); }
+.plan-serie .flamme.allumee { opacity: 1; filter: none; }
+.plan-serie .serie-ligne b { font-size: 48px; font-weight: 900; line-height: 1; }
+.sept-jours { display: flex; gap: 8px; margin-top: 12px; }
+.jour-serie { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: var(--attenue); }
+.jour-serie i { width: 22px; height: 22px; border-radius: 50%; background: var(--piste); border: 2px solid var(--contour-neutre); }
+.jour-serie.actif i { background: var(--orange); border-color: var(--orange); }
+.jour-serie.aujourdhui i { border-color: var(--encre); }
+.piste-plan { margin-bottom: 14px; }
+.piste-plan .onglet { font-size: 15px; padding: 9px 20px; }
+.piste-plan .onglet.actif { background: var(--accent); color: #fff; }
+.barre-semaine { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; margin-bottom: 12px; }
+.nav-semaine { display: flex; align-items: center; gap: 14px; }
+.nav-semaine .fleche-seance { border-radius: 50%; width: 44px; min-height: 44px; height: 44px; }
+.nav-semaine b { font-size: 19px; font-weight: 900; min-width: 0; }
+.reglages-plan { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.reglages-plan .segments { border-radius: 22px; }
+.reglages-plan .segment { border-radius: 20px; }
+.reglages-plan .segment[aria-pressed="true"] { background: var(--encre); color: var(--fond); }
+.repos { display: inline-flex; gap: 4px; }
+.rond-repos { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--contour-neutre); background: var(--surface); font-weight: 900; font-size: 13px; color: var(--encre); }
+.rond-repos[aria-pressed="true"] { background: var(--encre); color: var(--fond); border-color: var(--encre); }
+.semainier { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px; margin-bottom: 18px; }
+.jour-plan { display: flex; flex-direction: column; min-height: 230px; border: 2px solid var(--ligne); border-radius: 16px; background: var(--surface); color: var(--encre); text-decoration: none; overflow: hidden; transition: border-color .15s, transform .12s; }
+.jour-plan:hover { border-color: var(--contour-bleu); }
+.jour-plan.passe { opacity: .78; }
+.jour-plan.repos { background: var(--teinte-neutre); }
+.jour-plan.choisi { border-color: var(--accent); }
+.jour-tete { padding: 10px 12px 6px; }
+.jour-tete span { display: block; font-weight: 900; font-size: 12px; color: var(--attenue); }
+.jour-tete b { font-size: 26px; font-weight: 900; line-height: 1; }
+.jour-plan.aujourdhui .jour-tete { background: var(--accent); color: #fff; }
+.jour-plan.aujourdhui .jour-tete span { color: #fff; }
+.jour-evenements { display: flex; flex-wrap: wrap; gap: 4px; padding: 6px 10px 0; }
+.evt { font-style: normal; font-size: 10.5px; font-weight: 900; border-radius: 6px; padding: 1px 6px; background: var(--teinte-bleue); color: var(--bleu-profond); }
+.evt.examen { background: var(--teinte-orange); color: var(--texte-orange); }
+.jour-taches { display: flex; flex-direction: column; gap: 6px; padding: 8px 8px 0; flex: 1; }
+.mini-tache { display: flex; align-items: center; justify-content: space-between; gap: 4px; border-left: 3px solid var(--c); background: color-mix(in srgb, var(--c) 16%, var(--surface)); border-radius: 6px; padding: 5px 7px; font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; }
+.mini-tache svg { width: 12px; height: 12px; color: var(--succes); flex-shrink: 0; }
+.mini-tache.faite { opacity: .7; }
+.jour-pied { padding: 6px 10px 10px; font-size: 12px; font-weight: 700; color: var(--attenue); min-height: 26px; }
+.charge { display: block; height: 4px; border-radius: 2px; background: var(--piste); margin-top: 4px; overflow: hidden; }
+.charge i { display: block; height: 100%; background: var(--sarcelle); }
+.jour-detail { border-radius: 18px; }
+.grand-jour { font-size: 24px; }
+.jour-detail .avancement { margin: 10px 0 14px; }
+.taches { list-style: none; margin: 0; padding: 0; }
+.tache { position: relative; display: flex; align-items: center; gap: 14px; padding: 14px 16px 14px 22px; border: 1px solid var(--ligne); border-radius: 14px; margin-bottom: 10px; background: var(--surface); }
+.tache .trait { position: absolute; left: 0; top: 12px; bottom: 12px; width: 4px; border-radius: 2px; background: var(--c); }
+.tache.faite { background: var(--teinte-succes); }
+.tache.faite b { text-decoration: line-through; color: var(--attenue); }
+.icone-tache { width: 48px; height: 48px; border-radius: 12px; background: var(--teinte-neutre); display: grid; place-items: center; flex-shrink: 0; color: var(--encre); }
+.icone-tache svg { width: 24px; height: 24px; }
+.tache-texte { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.tache-texte b { font-size: 16px; }
+.tache-texte small { color: var(--attenue); font-size: 13.5px; }
+.badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.badges i { font-style: normal; display: inline-flex; align-items: center; gap: 4px; font-size: 12.5px; font-weight: 700; background: var(--piste); border-radius: 8px; padding: 2px 8px; }
+.badges i svg { width: 13px; height: 13px; }
+.badges .raison { background: var(--teinte-orange); color: var(--texte-orange); }
+.tache-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.tache-actions .bouton { min-height: 38px; border-radius: 20px; }
+.titre-section { font-size: 20px; font-weight: 900; margin: 18px 0 12px; }
+.grille-seances { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+.seance-progres { display: block; color: var(--encre); text-decoration: none; border-radius: 16px; }
+.seance-progres:hover { border-color: var(--contour-bleu); box-shadow: var(--ombre-survol); }
+.seance-progres-tete { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.seance-progres-tete b { display: block; font-size: 15px; line-height: 1.3; }
+.badge-s { display: inline-block; color: #fff; font-weight: 900; font-size: 11px; border-radius: 6px; padding: 1px 6px; margin-bottom: 3px; }
+.mesures { display: flex; flex-direction: column; gap: 6px; }
+.mesure { display: grid; grid-template-columns: 110px 1fr 74px; align-items: center; gap: 10px; font-size: 13px; }
+.mesure b { text-align: right; font-size: 12.5px; }
+@media (max-width: 1200px) { .plan-haut { grid-template-columns: 1fr 1fr; } .plan-conseils { grid-column: span 2; } }
+@media (max-width: 899.98px) {
+  .plan-haut { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .plan-conseils { grid-column: span 2; }
+  .conseils-tete .tete { width: 56px; height: 56px; }
+  .conseils { margin-left: 0; }
+  .plan-pret .anneau { width: 110px !important; height: 110px !important; }
+  .plan-pret .anneau .valeur { font-size: 26px !important; }
+  .barre-semaine { flex-direction: column; align-items: stretch; }
+  .nav-semaine { justify-content: space-between; }
+  .nav-semaine b { font-size: 16px; text-align: center; flex: 1; }
+  .semainier { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 8px; padding-bottom: 4px; margin-left: -4px; margin-right: -4px; }
+  .jour-plan { min-width: 118px; min-height: 180px; scroll-snap-align: start; }
+  .tache { flex-wrap: wrap; padding: 12px 12px 12px 18px; gap: 10px; }
+  .icone-tache { width: 40px; height: 40px; }
+  .tache-actions { width: 100%; justify-content: flex-start; padding-left: 38px; }
+  .grille-seances { grid-template-columns: 1fr; }
+}
+@media (max-width: 420px) { .plan-haut { grid-template-columns: 1fr; } .plan-conseils { grid-column: span 1; } }

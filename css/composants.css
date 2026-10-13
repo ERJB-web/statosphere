@@ -1,0 +1,187 @@
+/* Composants : en-tête de page, sélecteur de séance, encadrés de leçon, formules décortiquées, code, tableaux, chat de Sigma. */
+
+/* ---------- Têtes de Sigma ---------- */
+.tete { display: block; }
+.tete.petite { width: 28px; height: 28px; }
+.tete.anime .paupieres { opacity: 0; animation: cligne 5.2s infinite; animation-delay: var(--delai, 0s); }
+@keyframes cligne { 0%, 93% { opacity: 0; } 94%, 96.5% { opacity: 1; } 97.5%, 100% { opacity: 0; } }
+
+/* ---------- Ouverture ---------- */
+.chargement { min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; background: var(--fond); }
+.ouverture { display: flex; flex-direction: column; align-items: center; gap: 14px; color: var(--attenue); font-weight: 700; text-align: center; padding: 24px; }
+.ouverture .tete { width: 96px; height: 96px; animation: flotte 2.4s ease-in-out infinite; }
+@keyframes flotte { 50% { transform: translateY(-6px) rotate(-2deg); } }
+
+/* ---------- En-tête de page ---------- */
+.entete-page { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin: 6px 0 18px; }
+.tuile-entete { width: 60px; height: 60px; border-radius: 16px; display: grid; place-items: center; background: var(--teinte); color: #fff; flex-shrink: 0;
+  box-shadow: 0 6px 18px -6px var(--teinte); }
+.tuile-entete svg { width: 30px; height: 30px; }
+.entete-textes { flex: 1; min-width: 220px; }
+.entete-textes .titre { margin-top: 2px; }
+.entete-droite { flex-shrink: 0; max-width: 100%; }
+.entete-simple { margin: 10px 0 18px; padding-bottom: 14px; border-bottom: 1px solid var(--ligne); }
+@media (max-width: 899.98px) {
+  .entete-page { gap: 12px; margin-bottom: 14px; }
+  .tuile-entete { width: 46px; height: 46px; border-radius: 13px; }
+  .tuile-entete svg { width: 24px; height: 24px; }
+  .entete-droite { width: 100%; }
+}
+
+/* ---------- Sélecteur de séance ---------- */
+.barre-seance { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 8px; }
+.selecteur-seance { display: flex; align-items: stretch; gap: 8px; flex: 1 1 520px; min-width: 0; max-width: 700px; }
+.fleche-seance { width: 46px; min-height: 48px; display: grid; place-items: center; border-radius: 12px; border: 1px solid var(--contour-bleu); background: var(--surface); color: var(--encre); flex-shrink: 0; }
+.fleche-seance:hover { background: var(--teinte-bleue); border-color: var(--bleu); }
+.fleche-seance svg { width: 20px; height: 20px; }
+.fleche-seance.inactive { opacity: .35; }
+.menu-seance { position: relative; flex: 1; min-width: 0; }
+.menu-texte { display: flex; align-items: center; gap: 10px; height: 100%; min-height: 48px; padding: 8px 14px 8px 16px; border-radius: 12px; border: 1px solid var(--contour-bleu); background: var(--surface); }
+.menu-texte b { flex: 1; min-width: 0; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.menu-detail { color: var(--attenue); font-size: 13px; white-space: nowrap; }
+.menu-texte svg { width: 18px; height: 18px; color: var(--attenue); flex-shrink: 0; }
+.menu-seance select { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; font-size: 16px; }
+.menu-seance:hover .menu-texte { border-color: var(--bleu); }
+.resume-seance { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 18px; background: var(--piste); font-weight: 700; font-size: 13.5px; color: var(--encre); }
+.resume-seance svg { width: 16px; height: 16px; color: var(--teinte, var(--accent)); }
+.liens-seance { display: flex; gap: 18px; margin: 2px 0 12px 2px; }
+@media (max-width: 899.98px) { .menu-detail { display: none; } .selecteur-seance { flex-basis: 100%; } }
+
+/* ---------- Encadrés ---------- */
+.encadre { position: relative; border-radius: 14px; padding: 14px 20px 15px 22px; margin: 6px 0 18px; background: var(--teinte-neutre); }
+.encadre::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 4px; border-radius: 2px; background: var(--contour-bleu); }
+.encadre-tete { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; font-weight: 900; font-size: 11px; letter-spacing: .02em; color: var(--bleu-profond); }
+.encadre-tete svg { width: 15px; height: 15px; }
+.encadre.enclair { background: var(--teinte-sarcelle); } .encadre.enclair::before { background: var(--sarcelle); } .encadre.enclair .encadre-tete { color: var(--texte-sarcelle); }
+.encadre.definition { background: var(--teinte-bleue); } .encadre.definition::before { background: var(--bleu); } .encadre.definition .encadre-tete { color: var(--bleu); }
+.encadre.attention { background: var(--teinte-orange); } .encadre.attention::before { background: var(--orange); } .encadre.attention .encadre-tete { color: var(--texte-orange); }
+.encadre.aretenir { background: var(--teinte-verte); } .encadre.aretenir::before { background: var(--vert); } .encadre.aretenir .encadre-tete { color: var(--succes); }
+.encadre.exemple { background: var(--teinte-violette); } .encadre.exemple::before { background: var(--violet); } .encadre.exemple .encadre-tete { color: var(--violet); }
+.encadre-tete.bleu { color: var(--bleu); } .encadre-tete.sarcelle { color: var(--texte-sarcelle); }
+.bloc-texte, .encadre, .carte-interieure { font-size: 16px; line-height: 1.6; }
+.bloc-texte p, .encadre p { margin: 0 0 10px; }
+.bloc-texte ul, .bloc-texte ol, .encadre ul, .encadre ol { margin: 4px 0 10px; padding-left: 22px; }
+.bloc-texte li, .encadre li { margin-bottom: 4px; }
+.bloc-texte h4 { font-size: 17px; margin: 14px 0 8px; }
+.carte-interieure.etapes, .carte-interieure.question { margin: 4px 0 18px; padding: 14px 18px 12px; }
+.etapes-num { list-style: none; margin: 0; padding: 0; }
+.etapes-num li { display: flex; gap: 10px; margin-bottom: 9px; line-height: 1.55; }
+.etapes-num .rond { width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 900; font-size: 12.5px; display: grid; place-items: center; flex-shrink: 0; margin-top: 1px; }
+.reponse-cachee { display: none; }
+.reponse-cachee.ouverte { display: block; animation: retourne .32s ease-out both; }
+@keyframes retourne { from { opacity: 0; transform: perspective(600px) rotateX(-12deg); } to { opacity: 1; transform: none; } }
+.question .reponse-cachee { margin-top: 10px; background: var(--teinte-sarcelle); border-radius: 12px; padding: 12px 14px; }
+.question .bouton { margin-top: 10px; }
+.se-lit { font-size: .88em; color: color-mix(in srgb, var(--encre) 78%, transparent); margin: -4px 0 10px; line-height: 1.5; }
+.se-lit em { font-style: italic; }
+.se-lit .katex { font-size: 1.02em; }
+.formule-centree { margin: 10px 0 12px; overflow-x: auto; overflow-y: hidden; }
+blockquote { margin: 0 0 10px; padding-left: 12px; border-left: 3px solid var(--contour-neutre); color: var(--attenue); }
+code.c { font-family: "Cascadia Mono", ui-monospace, Menlo, monospace; font-size: .9em; color: var(--bleu-profond); background: var(--fond-code); padding: 1px 5px; border-radius: 5px; }
+
+/* ---------- Formule décortiquée ---------- */
+.carte-formule { border: 1px solid var(--ligne); background: var(--surface); border-radius: 14px; padding: 14px 18px 16px; margin: 4px 0 18px; }
+.formule-grande { background: var(--teinte-bleue); border-radius: 12px; padding: 18px 14px; margin-bottom: 12px; text-align: center; overflow-x: auto; overflow-y: hidden; font-size: 1.22em; }
+.formule-grande .katex-display { margin: 0; }
+.formule-code { margin: 0 0 10px; text-align: center; }
+.formule-texte { background: var(--teinte-bleue); border-radius: 12px; padding: 12px 16px; margin-bottom: 10px; font-size: 16px; text-align: center; }
+.formule-resultat { font-weight: 700; color: var(--bleu-profond); margin: -4px 0 8px; text-align: center; }
+.sous-etiquette { font-weight: 900; font-size: 11px; color: var(--attenue); letter-spacing: .02em; margin: 10px 0 3px; }
+.sous-texte { font-size: 15px; line-height: 1.55; }
+.symboles { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; align-items: center; margin-top: 4px; }
+.symbole { display: contents; }
+.symbole .sym { justify-self: start; min-width: 38px; padding: 3px 9px; border-radius: 8px; background: var(--teinte-verte); border: 1px solid var(--contour-vert); text-align: center; }
+.symbole .sens { font-size: 14.5px; line-height: 1.45; }
+.carte-formule.compacte { padding: 10px 12px; margin: 8px 0; }
+.carte-formule.compacte .formule-grande { padding: 10px; font-size: 1.05em; }
+
+/* ---------- Code et sorties ---------- */
+pre.code, pre.sortie { margin: 0 0 10px; padding: 12px 16px; border-radius: 12px; background: var(--fond-code); border: 1px solid var(--ligne); color: var(--bleu-profond);
+  font-size: 13.5px; line-height: 1.5; overflow-x: auto; white-space: pre; -webkit-overflow-scrolling: touch; }
+pre.sortie { color: var(--encre); background: var(--surface); font-size: 12.5px; }
+.bloc-code { margin: 4px 0 18px; }
+.bloc-code .etiquette-section { margin: 8px 0 5px 2px; }
+.message-r { font-family: "Cascadia Mono", monospace; font-size: 12.5px; color: var(--texte-orange); margin: -4px 0 10px; }
+
+/* ---------- Tableaux ---------- */
+.tableau-defile { overflow-x: auto; margin: 6px 0 14px; -webkit-overflow-scrolling: touch; border-radius: 10px; border: 1px solid var(--ligne); }
+table.donnees { border-collapse: collapse; width: 100%; font-size: 14px; background: var(--surface); }
+table.donnees th, table.donnees td { padding: 7px 12px; border-bottom: 1px solid var(--ligne); text-align: left; white-space: nowrap; }
+table.donnees th { background: var(--piste); font-weight: 900; font-size: 12.5px; }
+table.donnees tr:last-child td { border-bottom: 0; }
+table.donnees.r { font-family: "Cascadia Mono", monospace; font-size: 12px; }
+
+/* ---------- Figures ---------- */
+.figure { margin: 6px 0 16px; text-align: center; }
+.figure img { max-width: 100%; border-radius: 10px; background: var(--fond-figure); }
+.figure img.absente { display: none; }
+.figure figcaption, .goa figcaption { font-size: 13px; color: var(--attenue); margin-top: 4px; }
+.goas { display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: center; margin: 4px 0 14px; }
+.goa { margin: 0; text-align: center; color: var(--encre); }
+
+/* ---------- Boîtes de code des exercices, corrections ---------- */
+.boite-code { border: 1px solid var(--ligne); border-radius: 14px; padding: 10px 14px 12px; margin: 6px 0 16px; background: var(--surface); }
+.boite-tete { display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 11px; color: var(--violet); margin-bottom: 6px; }
+.boite-tete svg { width: 16px; height: 16px; }
+.boite-tete .lien { font-size: 13px; min-height: 30px; }
+.correction { border-radius: 14px; border: 1px solid var(--ligne); padding: 12px 14px; margin: 8px 0 18px; background: var(--teinte-neutre); }
+.correction.reussie { background: var(--teinte-succes); border-color: var(--contour-vert); }
+.correction.a-revoir { background: var(--teinte-orange); }
+.correction-tete { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.correction .reponse-cachee { margin-top: 12px; background: var(--surface); border-radius: 12px; padding: 12px 14px; }
+.autoeval { display: inline-flex; gap: 8px; }
+.autoeval .puce svg { width: 15px; height: 15px; }
+.autoeval .puce.actif.ok { background: var(--succes); border-color: var(--succes); color: #fff; }
+.autoeval .puce.actif.ko { background: var(--orange); border-color: var(--orange); color: var(--texte-sur-orange, #102A3A); }
+h3.intertitre { font-size: 20px; font-weight: 900; margin: 26px 0 10px; padding-top: 14px; border-top: 1px solid var(--ligne); }
+
+/* ---------- Chat de Sigma ---------- */
+.fil-chat { flex: 1; overflow-y: auto; padding: 16px 16px 8px; display: flex; flex-direction: column; gap: 10px; background: var(--fond); -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+.entree-bulle { animation: apparition .24s ease-out both; }
+.ligne-sigma { display: flex; gap: 8px; align-items: flex-start; }
+.ligne-sigma .tete.petite { width: 34px; height: 34px; margin-top: 2px; }
+.bulle { border-radius: 18px; padding: 10px 14px; font-size: 15px; line-height: 1.5; max-width: 100%; overflow-wrap: anywhere; }
+.bulle p { margin: 0 0 8px; } .bulle p:last-child { margin: 0; }
+.bulle.sigma { background: var(--teinte-bleue); border: 1px solid var(--contour-bleu); border-top-left-radius: 6px; flex: 1; min-width: 0; }
+.bulle.eleve { align-self: flex-end; background: var(--sarcelle-profonde); color: #fff; border-top-right-radius: 6px; max-width: 82%; }
+.bulle .passage { margin-top: 8px; }
+.bulle .passage ol { padding-left: 20px; margin: 6px 0; }
+.bulle .titre-cartes { margin: 12px 0 6px; }
+.carte-sigma { display: flex; align-items: center; gap: 12px; margin-top: 8px; padding: 10px 12px; border-radius: 14px; background: var(--surface); border: 1px solid var(--contour-bleu); }
+.carte-sigma-texte { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.carte-sigma-texte b { font-size: 14.5px; line-height: 1.3; }
+.carte-sigma-texte span { font-size: 13px; color: var(--attenue); line-height: 1.35; }
+.carte-sigma .bouton { flex-shrink: 0; }
+.bulle.ecrit { display: inline-flex; gap: 5px; align-items: center; flex: 0 0 auto; padding: 14px 16px; }
+.bulle.ecrit span { width: 7px; height: 7px; border-radius: 50%; background: var(--bleu); animation: point 1s infinite ease-in-out; }
+.bulle.ecrit span:nth-child(2) { animation-delay: .15s; } .bulle.ecrit span:nth-child(3) { animation-delay: .3s; }
+@keyframes point { 0%, 80%, 100% { opacity: .25; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
+.rapides { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 16px 0; background: var(--fond); }
+.rapides:empty { padding: 0; }
+.rapide { border: 1px solid var(--contour-bleu); background: var(--teinte-bleue); color: var(--bleu-profond); font-weight: 700; font-size: 13px; padding: 8px 14px; min-height: 36px; border-radius: 18px; }
+.rapide:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+.saisie-chat { display: flex; gap: 10px; align-items: center; padding: 12px 16px 16px; background: var(--fond); border-radius: 0 0 20px 20px; }
+.champ-chat { flex: 1; min-width: 0; min-height: 48px; border-radius: 24px; border: 1px solid var(--contour-neutre); background: var(--surface); color: var(--encre); padding: 10px 18px; font-size: 16px; outline: none; }
+.champ-chat:focus { border-color: var(--bleu); box-shadow: 0 0 0 3px color-mix(in srgb, var(--bleu) 20%, transparent); }
+.bouton-rond { width: 48px; height: 48px; border-radius: 50%; border: 0; background: var(--accent); color: #fff; display: grid; place-items: center; box-shadow: var(--ombre-accent); flex-shrink: 0; }
+.bouton-rond:hover { background: var(--accent-survol); }
+.bouton-rond svg { width: 20px; height: 20px; margin-left: 3px; }
+@media (max-width: 899.98px) { .saisie-chat { border-radius: 0; padding-bottom: calc(12px + var(--sa-bas)); } }
+
+/* ---------- Barre Précédent / Suivant ---------- */
+.barre-suite { display: flex; align-items: center; gap: 10px; margin: 18px 0 4px; }
+.barre-suite .position { flex: 1; text-align: center; font-weight: 700; color: var(--attenue); font-size: 14px; }
+.barre-suite .bouton { min-width: 140px; }
+@media (max-width: 899.98px) {
+  .barre-suite { position: sticky; bottom: calc(var(--bas-ecran) + 8px); z-index: 15; margin: 16px -6px 0; padding: 8px; border-radius: 18px;
+    background: color-mix(in srgb, var(--surface) 90%, transparent); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); box-shadow: var(--ombre-flottante); }
+  .barre-suite .bouton { min-width: 0; flex: 0 0 auto; min-height: 50px; padding: 10px 16px; }
+  .barre-suite .bouton .lib-long { display: none; }
+  .barre-suite .position { font-size: 13px; line-height: 1.25; }
+}
+
+/* ---------- Messages ---------- */
+.carte.message { display: flex; gap: 16px; align-items: center; max-width: 760px; color: var(--attenue); font-size: 15px; }
+.carte.message .tuile-message { width: 44px; height: 44px; border-radius: 13px; background: var(--teinte-bleue); color: var(--bleu); display: grid; place-items: center; flex-shrink: 0; }
+.carte.message .tuile-message svg { width: 22px; height: 22px; }
+.vide-graphique { color: var(--attenue); font-size: 14px; padding: 30px 10px; text-align: center; }

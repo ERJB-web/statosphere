@@ -1,0 +1,20 @@
+{
+  "name": "Statosphère",
+  "short_name": "Statosphère",
+  "description": "Statosphère",
+  "lang": "fr-CA",
+  "dir": "ltr",
+  "id": "./",
+  "start_url": "./#/accueil",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#102A3A",
+  "theme_color": "#102A3A",
+  "icons": [
+    { "src": "icones/icone-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icones/icone-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icones/icone-masque-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icones/logo.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

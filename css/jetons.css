@@ -1,0 +1,106 @@
+/* Jetons de couleur : les mêmes que la version Windows (Theme/Tokens.xaml et TokensSombre.xaml). */
+@font-face { font-family: "Lato"; src: url("../fonts/Lato-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Lato"; src: url("../fonts/Lato-Bold.ttf") format("truetype"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Lato"; src: url("../fonts/Lato-Black.ttf") format("truetype"); font-weight: 900; font-display: swap; }
+@font-face { font-family: "Cascadia Mono"; src: url("../fonts/CascadiaMono-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+
+:root {
+  color-scheme: light;
+  --fond: #F4F7FA;
+  --encre: #102A3A;
+  --attenue: #566F7F;
+  --bleu: #0A6FB8;
+  --bleu-profond: #07558E;
+  --sarcelle: #16A6A1;
+  --sarcelle-profonde: #0E7C78;
+  --vert: #5BAE3F;
+  --orange: #D97A1F;
+  --texte-sarcelle: #0C7571;
+  --texte-orange: #A0560E;
+  --teinte-bleue: #EAF4FB;
+  --teinte-sarcelle: #EAF8F7;
+  --teinte-verte: #F0F8EA;
+  --teinte-orange: #FFF3E5;
+  --teinte-neutre: #EEF5FA;
+  --contour-bleu: #C7DFED;
+  --contour-sarcelle: #BDE2DE;
+  --contour-vert: #CAE5BF;
+  --contour-neutre: #C9D9E3;
+  --ligne: #E0E8EF;
+  --piste: #EAF1F6;
+  --sarcelle-clair: #9FE0D7;
+  --encre-surelevee: #1B4059;
+  --contour-sur-encre: #1F4A66;
+  --barre-survol: #15354B;
+  --succes: #2C7A30;
+  --teinte-succes: #E8F5E9;
+  --erreur: #C62828;
+  --teinte-erreur: #FDECEA;
+  --fond-code: #F7FBFD;
+  --ampoule: #F2B705;
+  --erreur-sur-encre: #FF9A8F;
+  --texte-sur-pastille: #FFFFFF;
+  --surface: #FFFFFF;
+  --surface-elevee: #FFFFFF;
+  --barre: #102A3A;
+  --accent: #0A6FB8;
+  --accent-survol: #07558E;
+  --accent-presse: #064576;
+  --anneau-focus: #0A6FB8;
+  --selection: #102A3A;
+  --texte-selection: #FFFFFF;
+  --texte-barre: #C9D9E3;
+  --texte-sur-fonce: #FFFFFF;
+  --ciel-haut: #0A2740;
+  --ciel-bas: #17496B;
+  --seance-1: #1565C0; --seance-2: #00796B; --seance-3: #7B1FA2; --seance-4: #C1440E; --seance-5: #2E7D32; --seance-6: #AD1457;
+  --seance-7: #3949AB; --seance-8: #8D6E00; --seance-9: #007C89; --seance-10: #6D4C41; --seance-11: #C62828; --seance-12: #455A64;
+  --seance-examen: #263238;
+  --succes-sur-encre: #8FD694;
+  --fond-figure: #FFFFFF;
+  --violet: #7652D6;
+  --teinte-violette: #F3EFFD;
+  --degrade-bandeau: linear-gradient(135deg, #0B3550 0%, #0B5577 55%, #0E7C78 100%);
+  --degrade-avancement: linear-gradient(90deg, #16A6A1, #0A6FB8);
+  --code-commentaire: #577181; --code-chaine: #2C7A30; --code-mot-cle: #07558E; --code-nombre: #0A6FB8; --code-operateur: #102A3A;
+  --ombre-carte: 0 3px 22px rgba(11, 34, 54, 0.07);
+  --ombre-survol: 0 8px 26px rgba(11, 34, 54, 0.16);
+  --ombre-flottante: 0 8px 30px rgba(11, 34, 54, 0.22);
+  --ombre-accent: 0 4px 16px rgba(10, 111, 184, 0.4);
+}
+
+/* Thème sombre : les mêmes clés, éclaircies pour un contraste d'au moins 4,5:1. Appliqué par choix (data-theme="sombre") ou comme le système. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="clair"]) {
+    color-scheme: dark;
+    --fond: #0F1923; --encre: #E4EDF3; --attenue: #9CB1BF; --bleu: #459BDC; --bleu-profond: #7DBDF0; --sarcelle: #2FB9B3; --sarcelle-profonde: #0E7C78;
+    --vert: #6CC24A; --orange: #F0953A; --texte-sarcelle: #2FB9B3; --texte-orange: #F0953A; --teinte-bleue: #15283A; --teinte-sarcelle: #11302F;
+    --teinte-verte: #172C17; --teinte-orange: #33240F; --teinte-neutre: #1C2A36; --contour-bleu: #2B4A63; --contour-sarcelle: #24524F; --contour-vert: #2F4D2B;
+    --contour-neutre: #2C3D4A; --ligne: #243442; --piste: #0B141B; --sarcelle-clair: #9FE0D7; --encre-surelevee: #1B3448; --contour-sur-encre: #1F3A50;
+    --barre-survol: #14222E; --succes: #5CC264; --teinte-succes: #16301A; --erreur: #FF6B6B; --teinte-erreur: #3A1A1A; --fond-code: #13202A;
+    --texte-sur-pastille: #0F1923; --surface: #17232D; --surface-elevee: #1D2B38; --barre: #0A1219; --accent: #1F78C1; --accent-survol: #1862A0;
+    --accent-presse: #144F84; --anneau-focus: #7DBDF0; --selection: #E4EDF3; --texte-selection: #0F1923; --texte-barre: #B8C7D2;
+    --seance-3: #8E3BC0; --seance-6: #C2185B; --seance-7: #5062C0; --seance-10: #8D6E63; --seance-12: #5A7684; --seance-examen: #546E7A;
+    --violet: #A58BF2; --teinte-violette: #231D38; --ciel-haut: #040B13; --ciel-bas: #0D2638;
+    --degrade-bandeau: linear-gradient(135deg, #0B2133 0%, #0D3550 55%, #0B5552 100%);
+    --degrade-avancement: linear-gradient(90deg, #2FB9B3, #3B95D9);
+    --code-commentaire: #8FA6B5; --code-chaine: #7BCB80; --code-mot-cle: #7DBDF0; --code-nombre: #5FB0F0; --code-operateur: #E4EDF3;
+    --ombre-carte: 0 3px 22px rgba(0, 0, 0, 0.28); --ombre-survol: 0 8px 26px rgba(0, 0, 0, 0.4); --ombre-flottante: 0 8px 30px rgba(0, 0, 0, 0.5);
+  }
+}
+:root[data-theme="sombre"] {
+  color-scheme: dark;
+  --fond: #0F1923; --encre: #E4EDF3; --attenue: #9CB1BF; --bleu: #459BDC; --bleu-profond: #7DBDF0; --sarcelle: #2FB9B3; --sarcelle-profonde: #0E7C78;
+  --vert: #6CC24A; --orange: #F0953A; --texte-sarcelle: #2FB9B3; --texte-orange: #F0953A; --teinte-bleue: #15283A; --teinte-sarcelle: #11302F;
+  --teinte-verte: #172C17; --teinte-orange: #33240F; --teinte-neutre: #1C2A36; --contour-bleu: #2B4A63; --contour-sarcelle: #24524F; --contour-vert: #2F4D2B;
+  --contour-neutre: #2C3D4A; --ligne: #243442; --piste: #0B141B; --sarcelle-clair: #9FE0D7; --encre-surelevee: #1B3448; --contour-sur-encre: #1F3A50;
+  --barre-survol: #14222E; --succes: #5CC264; --teinte-succes: #16301A; --erreur: #FF6B6B; --teinte-erreur: #3A1A1A; --fond-code: #13202A;
+  --texte-sur-pastille: #0F1923; --surface: #17232D; --surface-elevee: #1D2B38; --barre: #0A1219; --accent: #1F78C1; --accent-survol: #1862A0;
+  --accent-presse: #144F84; --anneau-focus: #7DBDF0; --selection: #E4EDF3; --texte-selection: #0F1923; --texte-barre: #B8C7D2;
+  --seance-3: #8E3BC0; --seance-6: #C2185B; --seance-7: #5062C0; --seance-10: #8D6E63; --seance-12: #5A7684; --seance-examen: #546E7A;
+  --violet: #A58BF2; --teinte-violette: #231D38; --ciel-haut: #040B13; --ciel-bas: #0D2638;
+  --degrade-bandeau: linear-gradient(135deg, #0B2133 0%, #0D3550 55%, #0B5552 100%);
+  --degrade-avancement: linear-gradient(90deg, #2FB9B3, #3B95D9);
+  --code-commentaire: #8FA6B5; --code-chaine: #7BCB80; --code-mot-cle: #7DBDF0; --code-nombre: #5FB0F0; --code-operateur: #E4EDF3;
+  --ombre-carte: 0 3px 22px rgba(0, 0, 0, 0.28); --ombre-survol: 0 8px 26px rgba(0, 0, 0, 0.4); --ombre-flottante: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
