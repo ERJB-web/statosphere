@@ -3,6 +3,8 @@ import { C } from "../modele.js";
 import { ico } from "../icones.js";
 import { entete, piste } from "../ui.js";
 import { esc, normaliser } from "../outils.js";
+import { listeEtapes } from "../rendu.js";
+import { telecharger, surTactile } from "../positron.js";
 
 const FAMILLES = ["Lettres grecques", "Opérateurs, relations et flèches", "Variables, estimés et espérances"];
 const COULEURS = ["#0A6FB8", "#16A6A1", "#5BAE3F"];
@@ -33,35 +35,74 @@ function lesCodes() {
   return (codes = [...vus.values()]);
 }
 
+/** Fichier de remplacements de texte macOS (Réglages Système › Clavier › Remplacements de texte) : « ;code » devient le symbole. */
+function remplacements() {
+  const xml = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const lignes = lesCodes().map(c => `\t<dict>\n\t\t<key>phrase</key>\n\t\t<string>${xml(c.sortie)}</string>\n\t\t<key>shortcut</key>\n\t\t<string>;${xml(c.code)}</string>\n\t</dict>`);
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n<plist version="1.0">\n<array>\n${lignes.join("\n")}\n</array>\n</plist>\n`;
+}
+const ETAPES_CLAVIER = [
+  "Télécharge le fichier avec le bouton ci-dessus.",
+  "Sur le Mac, ouvre Réglages Système › Clavier › Remplacements de texte, puis glisse le fichier dans la liste.",
+  "Les raccourcis arrivent aussi sur l'iPhone et l'iPad par iCloud (même identifiant Apple) : tape ;sigma puis Espace.",
+];
+
 export default async function raccourcis(r, API) {
   const vue = r.segments[0] === "codes" ? "codes" : "symboles";
   const famille = +(r.query.f || 0), q = r.query.q || "";
+  const qs = q.trim(), n = normaliser(qs).replace(/^;+/, "");
   const onglets = piste([{ id: "symboles", libelle: "Symboles", href: "#/raccourcis" }, { id: "codes", libelle: "Codes", href: "#/raccourcis/codes" }], vue, { remplacer: true });
+  const recherche = `<label class="recherche">${ico("recherche", 2)}<input class="champ" type="search" data-q value="${esc(q)}" placeholder="Chercher un code, une notion ou un symbole" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="search"></label>`;
+  const copie = '<span class="badge-copie" aria-hidden="true">Copié</span>';
   let corps;
   if (vue === "symboles") {
-    const filtres = `<div class="segments filtres-symboles" role="group" aria-label="Famille">${["Tout", "01 Grec", "02 Opérateurs", "03 Variables"].map((l, i) => `<a class="segment" href="#/raccourcis${i ? "?f=" + i : ""}" data-remplacer aria-pressed="${i === famille}">${l}</a>`).join("")}</div>`;
-    corps = filtres + [1, 2, 3].filter(f => !famille || f === famille).map(f => `<section class="famille-symboles"><div class="famille-tete"><span class="num-famille" style="--c:${COULEURS[f - 1]}">0${f}</span><b>${esc(FAMILLES[f - 1])}</b></div>
-<div class="grille-symboles">${SYMBOLES.filter(s => s[0] === f).map(([, s, nom]) => `<button class="tuile-symbole" style="--c:${COULEURS[f - 1]}" data-symbole="${esc(s)}" title="Copier « ${esc(s)} »" aria-label="${esc(`${s}, ${nom}`)}"><span class="glyphe">${esc(s)}</span><small>${esc(nom)}</small></button>`).join("")}</div></section>`).join("");
+    const codesDe = new Map();
+    for (const c of lesCodes()) { if (!codesDe.has(c.sortie)) codesDe.set(c.sortie, []); codesDe.get(c.sortie).push(c.code); }
+    const garde = ([, s, nom]) => !n || normaliser(nom).includes(n) || s.includes(qs) || (codesDe.get(s) || []).some(c => c.includes(n.replace(/\s+/g, "")));
+    const lien = i => "#/raccourcis" + (i || q ? "?" : "") + [i ? "f=" + i : "", q ? "q=" + encodeURIComponent(q) : ""].filter(Boolean).join("&");
+    const filtres = `<div class="segments filtres-symboles" role="group" aria-label="Famille">${["Tout", "01 Grec", "02 Opérateurs", "03 Variables"].map((l, i) => `<a class="segment" href="${lien(i)}" data-remplacer aria-pressed="${i === famille}">${l}</a>`).join("")}</div>`;
+    const familles = [1, 2, 3].filter(f => !famille || f === famille).map(f => ({ f, liste: SYMBOLES.filter(s => s[0] === f && garde(s)) })).filter(x => x.liste.length);
+    corps = recherche + filtres + (familles.length ? familles.map(({ f, liste }) => `<section class="famille-symboles"><div class="famille-tete"><span class="num-famille" style="--c:${COULEURS[f - 1]}">0${f}</span><b>${esc(FAMILLES[f - 1])}</b></div>
+<div class="grille-symboles">${liste.map(([, s, nom]) => `<button class="tuile-symbole" style="--c:${COULEURS[f - 1]}" data-symbole="${esc(s)}" title="Copier « ${esc(s)} »" aria-label="${esc(`${s}, ${nom}`)}"><span class="glyphe">${esc(s)}</span><small>${esc(nom)}</small>${copie}</button>`).join("")}</div></section>`).join("") : `<p class="attenue">Aucun symbole ne correspond. Essaie l'onglet « Codes ».</p>`);
   } else {
-    const n = normaliser(q.trim()).replace(/^;+/, "");
-    const liste = lesCodes().filter(c => !n || c.code.includes(n.replace(/\s+/g, "")) || normaliser(c.terme).includes(n) || c.sortie.includes(q.trim()));
-    corps = `<label class="recherche">${ico("recherche", 2)}<input class="champ" type="search" data-q value="${esc(q)}" placeholder="Chercher un code, une notion ou un symbole" autocomplete="off" autocapitalize="off" enterkeyhint="search"></label>
+    const liste = lesCodes().filter(c => !n || c.code.includes(n.replace(/\s+/g, "")) || normaliser(c.terme).includes(n) || c.sortie.includes(qs));
+    corps = `${recherche}
 <div class="attenue petit compte">${liste.length} code${liste.length > 1 ? "s" : ""}</div>
-<div class="table-codes">${liste.slice(0, 400).map(c => `<button class="ligne-code" data-symbole="${esc(c.sortie)}"><code>;${esc(c.code)}</code><span class="sortie-code">${esc(c.sortie)}</span><span class="terme-code">${esc(c.terme)}</span><small>${c.chapitre != null ? "ch. " + c.chapitre : ""}</small></button>`).join("")}</div>`;
+<div class="table-codes">${liste.slice(0, 400).map(c => `<button class="ligne-code" data-symbole="${esc(c.sortie)}"><code>;${esc(c.code)}</code><span class="sortie-code">${esc(c.sortie)}</span><span class="terme-code">${esc(c.terme)}</span><small>${c.chapitre != null ? "ch. " + c.chapitre : ""}</small>${copie}</button>`).join("")}</div>`;
   }
   const html = `${entete({ surtitre: "RACCOURCIS · 01", titre: "Tes symboles au clavier" })}
-<div class="raccourcis-haut"><section class="carte comment-faire"><div class="etiquette-section">COMMENT FAIRE</div><p>Touche un symbole pour le copier, puis colle-le là où tu écris. Ou tape <code>;</code> puis un code, et Espace ou Entrée, dans le champ « Tester ici ».</p></section>
+<div class="raccourcis-haut"><section class="carte comment-faire"><div class="etiquette-section">COMMENT FAIRE</div><p>Touche ou clique un symbole ou un code pour le copier, puis colle-le là où tu écris. Ou tape <code>;</code> puis un code, et Espace ou Entrée, dans le champ « Tester ici ».</p></section>
 <section class="carte tester"><div class="etiquette-section">TESTER ICI</div><textarea class="champ" data-tester rows="2" placeholder=";sigma puis Espace" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></textarea>
 <div class="rangee"><button class="bouton secondaire petit" data-copier-test>${ico("copier")}Copier</button></div></section></div>
+<section class="carte clavier-mac"><div class="etiquette-section">CLAVIER SUR MAC ET IPHONE, SANS RIEN INSTALLER</div>
+<p>Tous les codes <code>;code</code> deviennent des remplacements de texte : tu les tapes dans n'importe quelle application, comme un raccourci du clavier.</p>
+<div class="rangee"><button class="bouton" data-telecharger-codes>${ico("telecharger", 2)}Télécharger mes raccourcis pour Mac et iPhone</button></div>
+${listeEtapes(ETAPES_CLAVIER)}
+<p class="attenue petit">Certaines applications (Word, par exemple) gardent leur propre correction automatique : si un raccourci ne se remplace pas, touche le symbole pour le copier.${surTactile() ? " Le fichier se glisse dans les réglages d'un Mac : depuis un iPhone ou un iPad seul, touche les symboles pour les copier." : ""}</p></section>
 ${onglets}<div class="corps-raccourcis">${corps}</div>`;
   return {
     ecran: "raccourcis", titreDocument: "Raccourcis", html,
     apres(main) {
-      for (const b of main.querySelectorAll("[data-symbole]")) b.addEventListener("click", () => API.copier(b.getAttribute("data-symbole"), `« ${b.getAttribute("data-symbole")} » copié dans le presse-papiers.`));
-      const recherche = main.querySelector("[data-q]");
-      if (recherche) {
+      for (const b of main.querySelectorAll("[data-symbole]")) b.addEventListener("click", () => {
+        const s = b.getAttribute("data-symbole");
+        API.copier(s, `« ${s} » copié dans le presse-papiers.`);
+        b.classList.add("copie"); clearTimeout(b._m); b._m = setTimeout(() => b.classList.remove("copie"), 1300);
+      });
+      main.querySelector("[data-telecharger-codes]").addEventListener("click", () => {
+        telecharger("Statosphere-remplacements-de-texte.plist", remplacements());
+        API.toast("Fichier téléchargé : glisse-le dans Remplacements de texte");
+      });
+      const champ = main.querySelector("[data-q]");
+      if (champ) {
         let m = null;
-        recherche.addEventListener("input", () => { clearTimeout(m); m = setTimeout(() => { const v = recherche.value; history.replaceState(null, "", "#/raccourcis/codes" + (v ? "?q=" + encodeURIComponent(v) : "")); API.rendre({ garder: true, sansDefilement: true }).then(() => { const c = document.querySelector("[data-q]"); if (c) { c.focus(); c.setSelectionRange(v.length, v.length); } }); }, 180); });
+        champ.addEventListener("input", () => {
+          clearTimeout(m);
+          m = setTimeout(() => {
+            const v = champ.value, p = [famille && vue === "symboles" ? "f=" + famille : "", v ? "q=" + encodeURIComponent(v) : ""].filter(Boolean).join("&");
+            history.replaceState(null, "", (vue === "codes" ? "#/raccourcis/codes" : "#/raccourcis") + (p ? "?" + p : ""));
+            API.rendre({ garder: true, sansDefilement: true }).then(() => { const c = document.querySelector("[data-q]"); if (c) { c.focus(); c.setSelectionRange(v.length, v.length); } });
+          }, 180);
+        });
       }
       const t = main.querySelector("[data-tester]");
       const table = new Map(lesCodes().map(c => [c.code, c.sortie]));

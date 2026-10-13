@@ -9,6 +9,7 @@ import { C } from "../modele.js";
 import { ico } from "../icones.js";
 import { entete, selecteurSeance, lierSelecteurs } from "../ui.js";
 import { md, inl, inlLu, carteFormule, blocExercice, hydrater } from "../rendu.js";
+import { scriptsDevoir } from "../positron.js";
 import { esc, jour, S, insecables } from "../outils.js";
 
 const pad = n => String(n).padStart(2, "0");
@@ -102,7 +103,7 @@ function exercices(s, devoirId, API, r) {
     return `<a class="devoir${x === d ? " courant" : ""}" href="${API.lien("diapos", s.cle, "exercices", x.devoir)}${seulement ? "?revoir=1" : ""}" data-remplacer>
 <b>${inl(x.titre)}</b><span class="etiquettes">${M.etiquettesDevoir(x).map(t => `<i>${esc(t)}</i>`).join("")}</span><small>Réussi ${ev.filter(v => v === true).length} / ${ev.length}${arevoir ? ` · À revoir ${arevoir}` : ""}</small></a>`;
   }).join("");
-  const ctx = { dossier: "exercices", devoir: d.devoir, evaluation: id => E.autoevaluation(id) };
+  const ctx = { dossier: "exercices", devoir: d.devoir, evaluation: id => E.autoevaluation(id), script: scriptsDevoir(d) };
   return `<div class="exercices-seance"><aside class="liste-devoirs"><label class="case"><input type="checkbox" data-revoir${seulement ? " checked" : ""}> À revoir seulement</label>${items || `<p class="attenue petit">Aucun devoir à revoir.</p>`}</aside>
 <article class="devoir-courant"><h2 class="titre-devoir">${inl(d.titre)}</h2>${d.sujet.blocs.map(b => blocExercice(b, ctx)).join("")}</article></div>`;
 }

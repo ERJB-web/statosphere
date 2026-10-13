@@ -7,6 +7,7 @@ import { ico } from "../icones.js";
 import { tete } from "../dessins.js";
 import { entete, piste, selecteurSeance, lierSelecteurs, anneau, barre, courbe, legende } from "../ui.js";
 import { md, inl, inlLu, tex, blocLecon, carteFormule, tableau, lectureDe, hydrater } from "../rendu.js";
+import { scriptsLecon } from "../positron.js";
 import { esc, jour, S, insecables, melanger, distinct, trierPar, maintenant, jourDe, dateCourte } from "../outils.js";
 
 const ONGLETS = [
@@ -53,7 +54,8 @@ function ongletLecons(s, r, API, ctx) {
 <div class="sommaire-boutons"><a class="bouton secondaire" href="${API.lien("reviser", "qcm", s.cle)}?serie=chapitre&chapitre=${ch}">${ico("listeCochee")}Tester ce chapitre (QCM)</a>${C.fiches[ch] ? `<a class="bouton secondaire" href="${API.lien("reviser", "fiches", s.cle, ch)}">${ico("feuillets")}Fiche du chapitre</a>` : ""}</div></div>`;
   let partie = `<div class="surtitre petit-fil">${esc(`${M.Chap.etiquette(ch).toUpperCase()} · ${L.titre.toUpperCase()} · PARTIE ${i + 1} SUR ${parties.length}`)}</div><h2 class="titre-partie">${inl(p.titre)}${p.horsProgramme ? ' <span class="badge-revoir">HORS PROGRAMME</span>' : ""}</h2>`;
   if (i === 0 && (L.objectifs || []).length) partie += `<div class="objectifs"><div class="encadre-tete vert">${ico("cible", 2.1)}<span>CE QUE TU SAURAS FAIRE À LA FIN DU CHAPITRE</span></div><ul>${L.objectifs.map(o => `<li>${ico("coche", 2.8)}<span>${inl(o)}</span></li>`).join("")}</ul></div>`;
-  partie += p.blocs.map(blocLecon).join("");
+  const ctxCode = { script: scriptsLecon({ numero: n, titre: L.titre, partie: i + 1, titrePartie: p.titre }) };
+  partie += p.blocs.map(b => blocLecon(b, ctxCode)).join("");
   if (i === parties.length - 1 && (L.resume || []).length) partie += `<div class="resume-chapitre"><div class="encadre-tete">${ico("etoile", 2.1)}<span>RÉSUMÉ DU CHAPITRE</span></div>${L.resume.map(x => `<p>${inlLu(x)}</p>`).join("")}</div>`;
   partie += `<div class="fin-partie" id="fin-partie"></div>`;
   const prec = i > 0 ? route(i - 1) : null, suiv = i < parties.length - 1 ? route(i + 1) : null;

@@ -208,3 +208,21 @@
   .sujet-contenu { padding: 16px; }
   .titre-sujet { font-size: 22px; }
 }
+
+/* Copie d'un symbole : retour « Copié » sur la tuile ou la ligne */
+.tuile-symbole, .ligne-code { position: relative; }
+.badge-copie { position: absolute; inset: 0; display: none; place-items: center; border-radius: inherit; background: var(--succes); color: #fff; font-weight: 900; font-size: 15px; pointer-events: none; }
+.copie > .badge-copie { display: grid; }
+.corps-raccourcis > .recherche { margin-bottom: 12px; max-width: 520px; }
+.clavier-mac { margin: 0 0 16px; }
+.clavier-mac p { margin: 6px 0 10px; }
+.clavier-mac .etapes-num { margin: 14px 0 8px; }
+.clavier-mac > p.attenue { margin: 8px 0 0; }
+
+/* Code à pratiquer : bouton « Ouvrir dans Positron » ou « Copier le code » */
+.rangee-code { display: flex; flex-wrap: wrap; gap: 8px; margin: 2px 0 12px; }
+.boite-code .rangee-code { margin: 2px 0 8px; }
+.aide-dialogue { width: min(440px, calc(100vw - 32px)); border: 1px solid var(--ligne); border-radius: 16px; padding: 20px 22px 16px; background: var(--surface); color: var(--encre); box-shadow: 0 20px 60px -20px rgba(0, 0, 0, .5); }
+.aide-dialogue::backdrop { background: rgba(8, 20, 30, .5); }
+.aide-dialogue h2 { margin: 0 0 8px; font-size: 18px; }
+.aide-dialogue p { margin: 0 0 10px; line-height: 1.55; }

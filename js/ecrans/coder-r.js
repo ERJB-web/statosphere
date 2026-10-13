@@ -6,6 +6,7 @@ import { entete } from "../ui.js";
 import { inl } from "../rendu.js";
 import { blocExercice } from "../rendu.js";
 import { esc } from "../outils.js";
+import { scriptsSujet } from "../positron.js";
 
 export default async function coderR(r, API) {
   const t = C.tutoriel;
@@ -16,7 +17,7 @@ export default async function coderR(r, API) {
   const s = t.sujets.find(x => x.numero === n) || t.sujets[0];
   const termines = t.sujets.filter(x => E.estTermine(x.numero)).length;
   const titre = x => x.titre.replace(/`/g, "");
-  const ctx = { dossier: "tutoriel-r", devoir: "tutoriel", evaluation: id => E.autoevaluation(id) };
+  const ctx = { dossier: "tutoriel-r", devoir: "tutoriel", evaluation: id => E.autoevaluation(id), script: scriptsSujet(s) };
   const liste = `<nav class="sujets-r" aria-label="Sujets"><div class="etiquette-section">SUJETS · ${termines} SUR ${total} TERMINÉS</div>${t.sujets.map(x =>
     `${x.ajout ? `<div class="etiquette-section separateur-r">DEVOIR DU COURS · CH. 21</div>` : ""}<a class="sujet-r${x.estExercices ? " retrait" : ""}${x.numero === n ? " courant" : ""}${E.estTermine(x.numero) ? " termine" : ""}" href="${API.lien("coder-r", x.numero)}" data-remplacer>
 <span class="rond-sujet">${E.estTermine(x.numero) ? ico("coche", 2.6) : x.numero}</span><span>${inl(x.titre)}</span></a>`).join("")}</nav>`;

@@ -8,6 +8,7 @@ import { logo, tete } from "./dessins.js";
 import { ico } from "./icones.js";
 import { esc, jour, attendre } from "./outils.js";
 import { hydrater } from "./rendu.js";
+import { agirScript } from "./positron.js";
 import * as Sigma from "./sigma.js";
 
 export const NAV = [
@@ -267,6 +268,7 @@ document.addEventListener("click", e => {
     const z = document.getElementById(el.getAttribute("data-cible"));
     if (z) { z.classList.toggle("ouverte"); el.classList.toggle("ouvert"); if (z.classList.contains("ouverte")) hydrater(z); }
   } else if (act === "copier") copier(el.getAttribute("data-texte") || "");
+  else if (act === "script") agirScript(el.getAttribute("data-script"), API);
   else if (act === "suite") allerSuite(+el.getAttribute("data-dir"));
   else if (act === "aller-cible") { try { aller(JSON.parse(el.getAttribute("data-cible")), el.hasAttribute("data-serie") ? +el.getAttribute("data-serie") : undefined); } catch (x) { /* rien */ } }
 });

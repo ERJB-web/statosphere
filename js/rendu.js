@@ -4,6 +4,7 @@ import { esc, insecables } from "./outils.js";
 import { ico } from "./icones.js";
 import { C } from "./modele.js";
 import * as Contenu from "./contenu.js";
+import { boutonCode } from "./positron.js";
 
 /* ---------- Formules ---------- */
 const cacheTex = new Map();
@@ -197,7 +198,7 @@ export function listeEtapes(liste) {
 }
 let compteurQuestion = 0;
 /** Bloc d'une partie de leçon (texte, encadrés, formule, étapes, code, question). */
-export function blocLecon(b) {
+export function blocLecon(b, ctx) {
   switch (b.genre) {
     case "texte": return `<div class="bloc-texte">${md(b.texte)}</div>`;
     case "enclair": case "attention": case "aretenir": return encadre(b.genre, b.texte);
@@ -205,9 +206,12 @@ export function blocLecon(b) {
     case "exemple": return encadre("exemple", (b.titre ? `**${b.titre}**\n\n` : "") + (b.texte || ""), "EXEMPLE");
     case "formule": return `<div class="bloc-formule">${carteFormule(b)}${b.texte ? "" : ""}</div>`;
     case "etapes": return etapes(b.titre ? "PAS À PAS · " + b.titre.toUpperCase() : "PAS À PAS", b.etapes);
-    case "code":
+    case "code": {
+      const sp = ctx && ctx.script ? ctx.script(b) : null;
       return `<div class="bloc-code">${b.preparation ? `<div class="etiquette-section">PRÉPARATION</div><pre class="code">${esc(b.preparation)}</pre>` : ""}<pre class="code">${esc(b.code)}</pre>` +
+        (sp ? `<div class="rangee-code">${boutonCode(sp)}</div>` : "") +
         (b.sortie ? `<div class="etiquette-section">SORTIE DE R</div><pre class="sortie">${esc(String(b.sortie).replace(/^\n+|\n+$/g, ""))}</pre>` : "") + "</div>";
+    }
     case "question": {
       const id = "q" + (++compteurQuestion);
       return `<div class="carte-interieure question"><div class="encadre-tete sarcelle">${ico("cible", 2.1)}<span>QUESTION POUR VÉRIFIER</span></div>${md(b.texte)}` +
@@ -261,13 +265,18 @@ export function blocExercice(b, ctx) {
     case "texte": return `<div class="bloc-texte">${md(b.texte)}</div>`;
     case "encart": return encadre("enclair", b.texte, b.encart === "positron" ? "AVEC POSITRON" : "À NOTER");
     case "image": return `<figure class="figure"><img alt="" data-contenu="${esc(cheminImage(b.image, ctx.dossier))}">${b.texte ? `<figcaption>${inl(b.texte)}</figcaption>` : ""}</figure>`;
-    case "exemple": case "donnees":
-      return (b.echo === false || !b.code ? "" : `<pre class="code">${esc(b.code)}</pre>`) + (b.sorties || []).map(so => sortieR(so, ctx.dossier)).join("");
+    case "exemple": case "donnees": {
+      const sp = ctx.script ? ctx.script(b) : null;
+      return (b.echo === false || !b.code ? "" : `<pre class="code">${esc(b.code)}</pre>`) + (sp ? `<div class="rangee-code">${boutonCode(sp)}</div>` : "") + (b.sorties || []).map(so => sortieR(so, ctx.dossier)).join("");
+    }
     case "goa": return (b.texte ? `<div class="bloc-texte">${md(b.texte)}</div>` : "") + `<div class="goas">${(b.goas || []).map(goa).join("")}</div>`;
     case "exercice": {
-      const ex = b.exercice || {};
-      return `<div class="boite-code"><div class="boite-tete">${ico("code", 2)}<span>À TOI · CODE DE DÉPART</span><span class="espace"></span><button class="lien" data-action="copier" data-texte="${esc(ex.codeDepart || "")}">${ico("copier")}Copier</button></div><pre class="code">${esc(ex.codeDepart || "")}</pre>` +
-        (ex.solution ? `<button class="bouton secondaire petit" data-action="reveler" data-cible="sol-${esc(b.id)}">${ico("oeil")}Voir la solution</button><div class="reponse-cachee" id="sol-${esc(b.id)}"><pre class="code">${esc(ex.solution)}</pre></div>` : "") + "</div>";
+      const ex = b.exercice || {}, sp = ctx.script ? ctx.script(b) : null;
+      const bouton = sp ? boutonCode(sp, { principal: true }) : "";
+      const solution = ex.solution ? `<button class="bouton secondaire petit" data-action="reveler" data-cible="sol-${esc(b.id)}">${ico("oeil")}Voir la solution</button>` : "";
+      return `<div class="boite-code"><div class="boite-tete">${ico("code", 2)}<span>À TOI · CODE DE DÉPART</span><span class="espace"></span>${sp ? "" : `<button class="lien" data-action="copier" data-texte="${esc(ex.codeDepart || "")}">${ico("copier")}Copier</button>`}</div><pre class="code">${esc(ex.codeDepart || "")}</pre>` +
+        (bouton || solution ? `<div class="rangee-code">${bouton}${solution}</div>` : "") +
+        (ex.solution ? `<div class="reponse-cachee" id="sol-${esc(b.id)}"><pre class="code">${esc(ex.solution)}</pre></div>` : "") + "</div>";
     }
     case "correction": {
       const id = `${ctx.devoir}/${b.texte}`, ev = ctx.evaluation ? ctx.evaluation(id) : null;
@@ -275,7 +284,7 @@ export function blocExercice(b, ctx) {
       return `<div class="correction${ev === true ? " reussie" : ev === false ? " a-revoir" : ""}" data-correction="${esc(id)}">
 <div class="correction-tete"><button class="bouton secondaire" data-action="reveler" data-cible="${cle}">${ico("oeil")}Voir la correction${b.texte ? " : " + esc(b.texte) : ""}</button>
 <span class="espace"></span>${ctx.evaluation ? `<span class="autoeval"><button class="puce${ev === true ? " actif ok" : ""}" data-action="autoeval" data-id="${esc(id)}" data-val="1">${ico("coche", 2.4)}Réussi</button><button class="puce${ev === false ? " actif ko" : ""}" data-action="autoeval" data-id="${esc(id)}" data-val="0">${ico("retourner", 2)}À revoir</button></span>` : ""}</div>
-<div class="reponse-cachee${ctx.ouvert ? " ouverte" : ""}" id="${cle}">${(b.contenu || []).map(x => blocExercice(x, ctx)).join("")}</div></div>`;
+<div class="reponse-cachee${ctx.ouvert ? " ouverte" : ""}" id="${cle}">${(b.contenu || []).map(x => blocExercice(x, { ...ctx, script: null })).join("")}</div></div>`;
     }
     default: return b.texte ? `<div class="bloc-texte">${md(b.texte)}</div>` : "";
   }
